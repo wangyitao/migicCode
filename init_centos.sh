@@ -1,3 +1,4 @@
+#!/bin/bash
 PYTHON_VERSION=3.7.3
 INSTALL_DIR=/opt/python3
 sed -i 's/ONBOOT=no/ONBOOT=yes/g' /etc/sysconfig/network-scripts/ifcfg-ens33
