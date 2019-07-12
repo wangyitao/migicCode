@@ -9,7 +9,9 @@ yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel zlib-devel bzip2-deve
 yum -y install wget vim net-tools
 rm -rf /var/cache/yum/*
 wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.xz
-mkdir $INSTALL_DIR
+if [ ! -d $INSTALL_DIR ];then
+    mkdir $INSTALL_DIR
+fi
 mv Python-$PYTHON_VERSION.tar.xz $INSTALL_DIR
 cd $INSTALL_DIR
 tar -xvJf Python-$PYTHON_VERSION.tar.xz
