@@ -219,28 +219,29 @@ class Translate(object):
 
 if __name__ == '__main__':
     tran = Translate()
-    content = '''
-    It's true that we don't know what we've got until we lose it, but it's also true that we don't know what we've been losing until it arrives.
-    '''
-    print(tran.baidu(content))
-    print(tran.google(content))
-    print(tran.youdao(content))
-
-    content = """Beautiful is better than ugly. Explicit is better than implicit. Simple is better than complex. Complex is better than complicated. Flat is better than nested. Sparse is better than dense. Readability counts. Special cases aren't special enough to break the rules. Although practicality beats purity. Errors should never pass silently. Unless explicitly silenced. In the face of ambiguity, refuse the temptation to guess. There should be one-- and preferably only one --obvious way to do it. Although that way may not be obvious at first unless you're Dutch. Now is better than never. Although never is often better than *right* now. If the implementation is hard to explain, it's a bad idea. If the implementation is easy to explain, it may be a good idea. Namespaces are one honking great idea -- let's do more of those!"""
-    print(tran.baidu(content))
-    print('\n')
-    print(tran.google(content))
-    print('\n')
-    print(tran.youdao(content))
-    print('\n')
-
-    content = '''
-    一个人至少拥有一个梦想，有一个理由去坚强。心若没有栖息的地方，到哪里都是在流浪。
-    '''
-    print(tran.baidu(content,en_to_zh=False))
-    print('\n')
-    print(tran.google(content,en_to_zh=False))
-    print('\n')
-    print(tran.youdao(content,en_to_zh=False))
-    print('\n')
+    print(tran.google('娱乐',en_to_zh=False))
+    # content = '''
+    # It's true that we don't know what we've got until we lose it, but it's also true that we don't know what we've been losing until it arrives.
+    # '''
+    # print(tran.baidu(content))
+    # print(tran.google(content))
+    # print(tran.youdao(content))
+    #
+    # content = """Beautiful is better than ugly. Explicit is better than implicit. Simple is better than complex. Complex is better than complicated. Flat is better than nested. Sparse is better than dense. Readability counts. Special cases aren't special enough to break the rules. Although practicality beats purity. Errors should never pass silently. Unless explicitly silenced. In the face of ambiguity, refuse the temptation to guess. There should be one-- and preferably only one --obvious way to do it. Although that way may not be obvious at first unless you're Dutch. Now is better than never. Although never is often better than *right* now. If the implementation is hard to explain, it's a bad idea. If the implementation is easy to explain, it may be a good idea. Namespaces are one honking great idea -- let's do more of those!"""
+    # print(tran.baidu(content))
+    # print('\n')
+    # print(tran.google(content))
+    # print('\n')
+    # print(tran.youdao(content))
+    # print('\n')
+    #
+    # content = '''
+    # 一个人至少拥有一个梦想，有一个理由去坚强。心若没有栖息的地方，到哪里都是在流浪。
+    # '''
+    # print(tran.baidu(content,en_to_zh=False))
+    # print('\n')
+    # print(tran.google(content,en_to_zh=False))
+    # print('\n')
+    # print(tran.youdao(content,en_to_zh=False))
+    # print('\n')
 
