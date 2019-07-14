@@ -7,7 +7,7 @@ yum -y update
 yum -y groupinstall "Development tools"
 yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel
 yum -y install wget vim net-tools
-wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-$PYTHON_VERSION.tar.xz
+wget https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tar.xz
 if [[ -d ${INSTALL_DIR} ]];then
     rm -rf ${INSTALL_DIR}
 fi
@@ -15,7 +15,7 @@ mkdir ${INSTALL_DIR}
 mv Python-${PYTHON_VERSION}.tar.xz ${INSTALL_DIR}
 cd ${INSTALL_DIR}
 tar -xvJf Python-${PYTHON_VERSION}.tar.xz
-rm -rf Python-${PYTHON_VERSION}.tar.xz && cd Python-$PYTHON_VERSION
+rm -rf Python-${PYTHON_VERSION}.tar.xz && cd Python-${PYTHON_VERSION}
 ./configure --prefix=${INSTALL_DIR}
 make && make install && make distclean
 rm -rf ${INSTALL_DIR}/Python-${PYTHON_VERSION}/
