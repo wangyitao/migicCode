@@ -6,6 +6,7 @@ import xlrd
 from openpyxl import load_workbook
 import openpyxl
 from openpyxl.drawing.image import Image
+from openpyxl.styles import PatternFill, Font
 
 
 class OperationExcel(object):
@@ -17,9 +18,18 @@ class OperationExcel(object):
             self.creatwb(self.filename)
             self.__workbook = xlrd.open_workbook(self.filename)
         self.__wb = load_workbook(self.filename)
+        self.ws = self.__wb.active
+
+    def __enter__(self):
+        """进入with语句的时候被调用"""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """离开with的时候被with调用"""
+        self.__wb.save(self.filename)
+        self.__wb.close()
 
     def get_sheet_names(self):
-
         return self.__wb.sheetnames
 
     def get_data(self, row=1, col=1, sheet_name=None, flag='0'):
@@ -47,38 +57,16 @@ class OperationExcel(object):
             print('该位置没有数据', e)
 
     def get_all_data(self, sheet_name=None):
-        # if sheet_name is None:
-        #     ws = self.__wb.active
-        # else:
-        #     ws = self.__wb.get_sheet_by_name(sheet_name)
-        # # 获取表格所有行和列，两者都是可迭代的
-        # rows = ws.rows
-        # columns = ws.columns
-        #
-        # # 迭代所有的行
-        # datas = []
-        # for row in rows:
-        #     line = [col.value for col in row]
-        #     datas.append(line)
-        #     print(line)
-        #
-        # return datas
-
         if sheet_name is None:
             sheet_name = self.get_sheet_names()[0]
         sheet = self.__workbook.sheet_by_name(sheet_name)
-        datas = []
         data = []
         for i in range(sheet.nrows):
             data.append(sheet.row_values(i))
-            # datas.append(data)
         return data
 
     def get_max_row_and_col(self):
-        ws = self.__wb.active
-        # sheet = self.__workbook.sheet_by_name(sheet_name)
-        # return {'max_rows': sheet.nrows, 'max_cols': sheet.ncols}
-        return {'max_rows': ws.max_row, 'max_cols': ws.max_column}
+        return {'max_rows': self.ws.max_row, 'max_cols': self.ws.max_column}
 
     # 新建excel
     def creatwb(self, filename):
@@ -88,36 +76,76 @@ class OperationExcel(object):
 
     # 写入数据
     def write_data(self, col, row, data):
-        ws = self.__wb.active
-        # ws.cell(row=row, column=col).value = data
-        ws.cell(row, col, data)
-        self.__wb.save(self.filename)
-        self.__wb.close()
+        self.ws.cell(row, col, data)
+
+    def write_all_data(self, data_list, left_offset=0, top_offset=0):
+        """
+        :param data_list: 列表或者元组[[],[],[]...],里面的每一个表示一行
+        :param left_offset: 左边偏移
+        :param top_offset: 上边偏移
+        :return:
+        """
+        left_offset = left_offset if str(left_offset).isdigit() and left_offset > 0 else 0
+        top_offset = top_offset if str(top_offset).isdigit() and top_offset > 0 else 0
+        lens = len(data_list)
+        for index, data in enumerate(data_list):
+            for i, dd in enumerate(data):
+                self.ws.cell(index + top_offset + 1, i + left_offset + 1, dd)
+            print(index + 1, lens, data)
+
+    def set_color(self, col, row, color):
+        """
+        设置单元格颜色
+        :param col:
+        :param row:
+        :param color: 颜色：如 FFFFFF
+        :return:
+        """
+        # 单元格填充颜色
+        self.ws.cell(row, col).fill = PatternFill(fill_type='solid', fgColor=color)
+
+    def set_hyperlink(self, col, row, hyperlink):
+        """
+        设置超链接
+        :param col:
+        :param row:
+        :param hyperlink:超链接地址
+        :return:
+        """
+        self.ws.cell(row, col).hyperlink = hyperlink
+
+    def set_font(self, col, row, font):
+        self.ws.cell(row, col).font = font
 
     # 往Excel中插入图片
     def insert_img(self, img_name, place=None):
-        ws = self.__wb.active
         img = Image(img_name)
         if place is None:
-            ws.add_image(img)
+            self.ws.add_image(img)
         else:
-            ws.add_image(img, place)  # 例如'A1'
-        self.__wb.save(self.filename)
-        self.__wb.close()
+            self.ws.add_image(img, place)  # 例如'A1'
 
 
 if __name__ == '__main__':
-    op = OperationExcel('a.xlsx')
-    d = op.get_sheet_names()
-    print(d)
-    # print(op.get_data('Sheet2', 1, 2, 0))
-    # print(op.get_all_data('Sheet1'))
-    op.write_data(1, 3, 'test')
-    op.write_data(2, 3, 't2est')
+    with OperationExcel('a.xlsx') as op:
+        d = op.get_sheet_names()
+        print(d)
+        # print(op.get_data('Sheet2', 1, 2, 0))
+        # print(op.get_all_data('Sheet1'))
+        op.write_data(1, 3, 'test')
+        op.write_data(2, 3, 't2est')
 
-    # op.insert_img(r'1234.jpg')
-    # op.insert_img(r'1234.jpg', 'D3')
+        # op.insert_img(r'1234.jpg')
+        # op.insert_img(r'1234.jpg', 'D3')
+        op.write_all_data([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12, 15]], top_offset=-10, left_offset=15)
+        op.set_color(3, 5, 'ff0000')
+        op.write_data(3, 5, 'hello')
 
+        font = Font(
+            name="宋体",
+            size=15,
+        )
+        op.set_font(3, 5, font)
 
 '''
 
